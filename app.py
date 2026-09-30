@@ -1,8 +1,10 @@
-
 import sqlite3
 from flask import Flask, render_template, request
+from flask_wtf.csrf import CSRFProtect
 
 app = Flask(__name__)
+app.secret_key = "kunci-rahasia-super-aman"
+csrf = CSRFProtect(app)
 
 def init_db():
     """Inisialisasi basis data dan membuat data pengguna awal."""

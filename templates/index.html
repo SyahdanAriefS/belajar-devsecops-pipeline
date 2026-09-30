@@ -83,10 +83,12 @@
             <!-- nosemgrep: python.django.security.django-no-csrf-token.django-no-csrf-token -->
             <form method="POST" action="/">
                 <div class="form-group">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                     <label for="username">Nama Pengguna</label>
                     <input type="text" id="username" name="username" required />
                 </div>
                 <div class="form-group">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                     <label for="password">Kata Sandi</label>
                     <input type="password" id="password" name="password" required />
                 </div>
