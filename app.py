@@ -47,6 +47,52 @@ def index():
         "index.html", message=message, status_class=status_class
     )
 
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    """Menampilkan formulir registrasi dan memproses penambahan pengguna."""
+    message = None
+    status_class = None
+
+    if request.method == "POST":
+        username = request.form.get("username", "")
+        password = request.form.get("password", "")
+
+        if username and password:
+            conn = sqlite3.connect("users.db")
+            cursor = conn.cursor()
+            
+            # Cek apakah username sudah ada di database
+            cursor.execute("SELECT * FROM users WHERE username = ?", (username,))
+            existing_user = cursor.fetchone()
+            
+            if existing_user:
+                message = "Registrasi gagal! Username sudah digunakan."
+                status_class = "danger"
+            else:
+                # Insert data pengguna baru menggunakan parameterized query
+                cursor.execute(
+                    "INSERT INTO users (username, password) VALUES (?, ?)", 
+                    (username, password)
+                )
+                conn.commit()
+                message = "Registrasi Berhasil! Silakan kembali ke halaman login."
+                status_class = "success"
+                
+            conn.close()
+        else:
+            message = "Username dan password tidak boleh kosong!"
+            status_class = "warning"
+
+    return render_template(
+        "register.html", message=message, status_class=status_class
+    )
+
+@app.route("/dashboard")
+def dashboard():
+    """Menampilkan halaman dashboard untuk pengguna yang sudah login."""
+    # Catatan: Di aplikasi nyata, Anda perlu mengecek session login di sini
+    return render_template("dashboard.html")
+
 if __name__ == "__main__":
     init_db()
     app.run(host="0.0.0.0", port=5000)  # nosemgrep
