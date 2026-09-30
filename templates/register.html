@@ -36,6 +36,7 @@
             </div>
         {% endif %}
 
+        <!-- nosemgrep: python.django.security.django-no-csrf-token.django-no-csrf-token -->
         <form action="/register" method="POST">
             <div class="form-group">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
